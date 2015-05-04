@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-// Tova e zadachata za kravite i bikovete ot kursa po KPK na Nakov ava FMI, mnogo e lesna, ama taka ne e interesna, ebasi?
 public class cows_buls
 {
     private static List<PlayerInfo> klasirane =
     new List<PlayerInfo>();
-	private static int count1;
-	private static int count2;
-    
-	
-	
-	
-	private static string numberForGuessString;
+    private static int count1;
+    private static int count2;
+    private static string numberForGuessString;
     private static bool isGuessed;
     private static char[] helpingNumber;
     private static Random randomGenerator;
@@ -42,9 +37,6 @@ public class cows_buls
             }
             else	
             {
-
-
-
                 ProcessTextCommand(command);
             }
         }
@@ -74,10 +66,6 @@ public class cows_buls
     {
         int zeroesForAdd = 4 - numberForGuessString.Length;
         StringBuilder sb = new StringBuilder();
-
-
-
-
         for (int i = 0; i < zeroesForAdd; i++)
         {
             sb.Append("0");
@@ -233,9 +221,6 @@ public class cows_buls
             {
                 helpingNumber[digitForReveal] =
                 numberForGuessString[digitForReveal];
-
-
-
                 flag = true;
             }
             c++;
@@ -309,7 +294,7 @@ public class cows_buls
             foreach (var currentPlayerInfo in klasirane)
             {
                 Console.WriteLine("{0}| {1}",
-                                  currentPosition, currentPlayerInfo);
+                    currentPosition, currentPlayerInfo);
                 PrintLine(40);
                 currentPosition++;
             }

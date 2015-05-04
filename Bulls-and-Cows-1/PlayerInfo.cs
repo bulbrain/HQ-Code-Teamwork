@@ -3,14 +3,11 @@
 public class PlayerInfo : IComparable<PlayerInfo>
 {
     private string nickName;
-
     public string NickName
     {
         get
         {
-
-
-            return nickName;
+		return nickName;
         }
         set
         {
