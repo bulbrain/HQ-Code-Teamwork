@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace kravi
+﻿namespace Cows
 {
-    public class MyProvider : randomNumberProvider
+    public class MyProvider : RandomNumberProvider
     {
         public override string GetRandomNumber()
         {
-            return "1234";// ((int)(rand.NextDouble() * 9000 + 1000)).ToString();
+            return "1234";
+
+            // ((int)(rand.NextDouble() * 9000 + 1000)).ToString();
         }
     }
 }

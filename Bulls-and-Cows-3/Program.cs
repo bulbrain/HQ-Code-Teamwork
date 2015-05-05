@@ -1,35 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace kravi
+﻿namespace Cows
 {
-//Helloween sa mnogo zdravi, yaaaaaaaaaaahh snoshti biah na koncerta!!!!!!!!!!!!
+    using System;
+    using System.Collections.Generic;
+
     public delegate void TopScoresDelegate(Game g, ScoreBoard board);
-    class Program
+
+    internal class Program
     {
         private static void DoTopScores(Game g, ScoreBoard board)
         {
-            if (g.score != -1 && g.score < board.board[4].Score)
+            if (g.score != -1 && g.score < board.Board[4].Score)
             {
                 Console.Write("TOP SCORE! Please enter your name:");
-                string name = Console.ReadLine();
-
-
-
-                List<Record> list = new List<Record>(board.board);
+                var name = Console.ReadLine();
+                var list = new List<Record>(board.Board);
                 list.Add(new Record(name, g.score));
                 list.Sort();
-                for (int i = 0; i < 5; i++)
-                    board.board[i] = list[i];
+                for (var i = 0; i < 5; i++)
+                {
+                    board.Board[i] = list[i];
+                }
             }
         }
 
-        static void Main()
+        private static void Main()
         {
-            ScoreBoard board = new ScoreBoard();
-            while (new Game(board, DoTopScores).Run()) { }
+            var board = new ScoreBoard();
+            while (new Game(board, DoTopScores).Run())
+            {
+            }
         }
     }
 }

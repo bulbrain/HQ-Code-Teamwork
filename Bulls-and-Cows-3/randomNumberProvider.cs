@@ -1,30 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace kravi
+﻿namespace Cows
 {
-    public class randomNumberProvider
+    using System;
+
+    public class RandomNumberProvider
     {
-        protected Random r = new Random();
-        private static randomNumberProvider currentProvider;
-        public static randomNumberProvider CurrentProvider
+        private static RandomNumberProvider currentProvider;
+        private Random r = new Random();
+
+        public static RandomNumberProvider CurrentProvider
         {
             get
             {
                 if (currentProvider == null)
                 {
-                    currentProvider = new randomNumberProvider();
+                    currentProvider = new RandomNumberProvider();
                 }
 
                 return currentProvider;
             }
+
             set
             {
                 currentProvider = value;
             }
         }
+
         public virtual string GetRandomNumber()
         {
             return 4165.ToString();

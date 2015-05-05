@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-public class cows_buls
+public class CowsBuls
 {
-    private static List<PlayerInfo> klasirane =
-    new List<PlayerInfo>();
+    private static List<PlayerInfo> klasirane = new List<PlayerInfo>();
     private static int count1;
     private static int count2;
     private static string numberForGuessString;
@@ -35,7 +34,7 @@ public class cows_buls
             {
                 ProcessDigitCommand(command);
             }
-            else	
+            else
             {
                 ProcessTextCommand(command);
             }
@@ -70,6 +69,7 @@ public class cows_buls
         {
             sb.Append("0");
         }
+
         sb.Append(numberForGuessString);
         numberForGuessString = sb.ToString();
     }
@@ -79,7 +79,7 @@ public class cows_buls
         if (tryNumberString.Length == 4)
         {
             count2++;
-            if (isEqualToNumberForGuess(tryNumberString))
+            if (IsEqualToNumberForGuess(tryNumberString))
             {
                 isGuessed = true;
                 PrintCongratulationMessage();
@@ -101,8 +101,7 @@ public class cows_buls
         int cowsCount = 0;
         CountBullsAndCows(
             tryNumberString, ref bullsCount, ref cowsCount);
-        Console.WriteLine("Wrong number! Bulls: {0}, Cows: {1}!",
-                          bullsCount, cowsCount);
+        Console.WriteLine("Wrong number! Bulls: {0}, Cows: {1}!", bullsCount, cowsCount);
     }
 
     private static void CountBullsAndCows(
@@ -110,9 +109,6 @@ public class cows_buls
     {
         bool[] bulls = new bool[4];
         bool[] cows = new bool[10];
-
-
-
         bullsCount = CountBulls(tryNumberString, bullsCount, bulls);
         cowsCount = CountCows(tryNumberString, cowsCount, bulls, cows);
     }
@@ -131,8 +127,10 @@ public class cows_buls
                     tryNumberString, cowsCount, bulls, i);
             }
         }
+
         return cowsCount;
     }
+
     private static int CountBulls(
         string tryNumberString, int bullsCount, bool[] bulls)
     {
@@ -144,8 +142,10 @@ public class cows_buls
                 bulls[i] = true;
             }
         }
+
         return bullsCount;
     }
+
     private static int CountCowsForCurrentDigit(
         string tryNumberString, int cowsCount, bool[] bulls, int i)
     {
@@ -159,8 +159,10 @@ public class cows_buls
                 }
             }
         }
+
         return cowsCount;
     }
+
     private static void PrintCongratulationMessage()
     {
         if (count1 == 0)
@@ -175,15 +177,17 @@ public class cows_buls
             Console.WriteLine(
                 "Congratulations! You guessed the" +
                 " secret number in {0}" +
-                " attempts and {1} cheats.",
-                count2, count1);
+                " attempts and {1} cheats.", 
+                count2, 
+                count1);
         }
+
         Console.WriteLine();
     }
-    private static bool isEqualToNumberForGuess(string tryNumber)
+
+    private static bool IsEqualToNumberForGuess(string tryNumber)
     {
-        bool isEqualToNumberForGuess =
-        (tryNumber == numberForGuessString);
+        bool isEqualToNumberForGuess = tryNumber == numberForGuessString;
         return isEqualToNumberForGuess;
     }
 
@@ -210,12 +214,14 @@ public class cows_buls
                 break;
         }
     }
+
     private static void RevealDigit()
     {
         bool flag = false;
         int c = 0;
         while (!flag &&
-               c != 2 * numberForGuessString.Length){
+               c != 2 * numberForGuessString.Length)
+               {
             int digitForReveal = randomGenerator.Next(0, 4);
             if (helpingNumber[digitForReveal] == 'X')
             {
@@ -223,15 +229,21 @@ public class cows_buls
                 numberForGuessString[digitForReveal];
                 flag = true;
             }
+
             c++;
         }
+
         PrintHelpingNumber();
     }
 
     private static void PrintHelpingNumber()
     {
         Console.Write("The number looks like ");
-        foreach (char ch in helpingNumber) { Console.Write(ch); }
+        foreach (char ch in helpingNumber)
+        {
+            Console.Write(ch);
+        }
+
         Console.Write(".");
         Console.WriteLine();
     }
@@ -265,8 +277,9 @@ public class cows_buls
     private static void AddPlayer(int guesses)
     {
         Console.WriteLine("You can add your nickname to top scores!");
-        string playerNick = String.Empty;
-        while (playerNick == String.Empty)
+        string playerNick = string.Empty;
+        while (playerNick == string.Empty)
+        {
             try
             {
                 Console.Write("Enter your nickname: ");
@@ -279,6 +292,7 @@ public class cows_buls
                 Console.WriteLine(e.Message);
                 continue;
             }
+        }
     }
 
     private static void PrintScoreboard()
@@ -293,11 +307,11 @@ public class cows_buls
             PrintLine(40);
             foreach (var currentPlayerInfo in klasirane)
             {
-                Console.WriteLine("{0}| {1}",
-                    currentPosition, currentPlayerInfo);
+                Console.WriteLine("{0}| {1}", currentPosition, currentPlayerInfo);
                 PrintLine(40);
                 currentPosition++;
             }
+
             Console.WriteLine();
         }
         else
@@ -312,6 +326,7 @@ public class cows_buls
         {
             Console.Write("-");
         }
+
         Console.WriteLine();
     }
 }

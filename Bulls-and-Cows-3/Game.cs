@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace kravi
+﻿namespace Cows
 {
+    using System;
+    using System.Collections.Generic;
+
     public class Game
     {
+        private static readonly bool ShouldContinue = true;
+        private static readonly bool ShouldNotContinue = false;
+        private readonly TopScoresDelegate doTopScores;
+        private readonly ScoreBoard myBoard;
+        private int cposs;
         private string generatedNumberToWhatToGuess;
         private List<int> poss;
-        int cposs = 0;
-        internal int score; 
-        private static readonly bool shouldContinue = true;
-        private static readonly bool shouldNotContinue = false;
-        private ScoreBoard myBoard;
-        private TopScoresDelegate doTopScores;
+        public int score;
 
         public Game(ScoreBoard bb, TopScoresDelegate doTopScores)
         {
@@ -26,105 +24,110 @@ namespace kravi
         {
             get
             {
-                if (poss == null)
+                if (this.poss == null)
                 {
-                    poss = new List<int>();
-                    for(int i=0;i<generatedNumberToWhatToGuess.Length;++i)
+                    this.poss = new List<int>();
+                    for (var i = 0; i < this.generatedNumberToWhatToGuess.Length; ++i)
                     {
-                        poss.Add(i);
+                        this.poss.Add(i);
                     }
-                    for (int i = 0; i < generatedNumberToWhatToGuess.Length; i++)
+
+                    for (var i = 0; i < this.generatedNumberToWhatToGuess.Length; i++)
                     {
-                        int t = int.Parse(randomNumberProvider.CurrentProvider.GetRandomNumber());
-                        t = (int)((t - 1000.0) / 9000.0 * generatedNumberToWhatToGuess.Length);
-                        int tmp = poss[t];
-                        poss[t] = poss[i];
-                        poss[i] = tmp;
+                        var t = int.Parse(RandomNumberProvider.CurrentProvider.GetRandomNumber());
+                        t = (int)((t - 1000.0) / 9000.0 * this.generatedNumberToWhatToGuess.Length);
+                        var tmp = this.poss[t];
+                        this.poss[t] = this.poss[i];
+                        this.poss[i] = tmp;
                     }
                 }
 
-                return poss;
+                return this.poss;
             }
         }
 
         public bool Run()
         {
             Console.WriteLine("A new game has begun!");
-            Init();
+            this.Init();
 
             while (true)
             {
-                string komandata = Console.ReadLine();
+                var komandata = Console.ReadLine();
                 switch (komandata)
                 {
                     case "exit":
-                        return shouldNotContinue;
+                        return ShouldNotContinue;
                     case "restart":
-                        return shouldContinue;
+                        return ShouldContinue;
                     case "help":
-                        score = -1;
-                        ShowRand();
+                        this.score = -1;
+                        this.ShowRand();
                         break;
                     case "top":
-                        myBoard.Output();
+                        this.myBoard.Output();
                         break;
                     default:
-                        if (score != -1)
+                        if (this.score != -1)
                         {
-                            score++;
+                            this.score++;
                         }
 
-                        if (MatchCurrent(komandata))
+                        if (this.MatchCurrent(komandata))
                         {
                             this.doTopScores(this, this.myBoard);
 
-                            if (Qustion())
+                            if (this.Qustion())
                             {
-                                return shouldContinue;
+                                return ShouldContinue;
                             }
-                            else 
-                            {
-                                return shouldNotContinue;
-                            }
+
+                            return ShouldNotContinue;
                         }
+
                         break;
                 }
-            } 
+            }
         }
 
         private bool Qustion()
         {
             Console.WriteLine("Another game ? (Y/N)");
-            string s = Console.ReadLine();
-            if (s.ToLower() == "y") return true;
-            else return false;
+            var s = Console.ReadLine();
+            if (s.ToLower() == "y")
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private bool MatchCurrent(string cmd)
         {
-            if (cmd == generatedNumberToWhatToGuess)
+            if (cmd == this.generatedNumberToWhatToGuess)
             {
                 Console.WriteLine("HOLYCOW, YOU HAVE WON!");
                 return true;
             }
 
-            bool[] found = new bool[generatedNumberToWhatToGuess.Length];
+            var found = new bool[this.generatedNumberToWhatToGuess.Length];
 
-            int b = Count2(cmd, found);
-            int c = Count1(cmd, found);
+            var b = this.Count2(cmd, found);
+            var c = this.Count1(cmd, found);
 
-            Console.WriteLine(b + " bull" + ((b != 1) ? "s" : "") + " and " + c + " cow" + ((c != 1) ? "s" : ""));
+            Console.WriteLine(b + " bull" + ((b != 1) ? "s" : string.Empty) + " and " + c + " cow" +
+                              ((c != 1) ? "s" : string.Empty));
             return false;
         }
 
         private int Count2(string cmd, bool[] found)
         {
-            int c = 0;
-            for (int i = 0; i < generatedNumberToWhatToGuess.Length; i++)
+            var c = 0;
+            for (var i = 0; i < this.generatedNumberToWhatToGuess.Length; i++)
             {
-                for (int j = 0; j < cmd.Length; j++)
+                for (var j = 0; j < cmd.Length; j++)
                 {
-                    if (generatedNumberToWhatToGuess[i] == cmd[j])
+                    if (this.generatedNumberToWhatToGuess[i] == cmd[j])
                     {
                         if (i == j)
                         {
@@ -140,15 +143,15 @@ namespace kravi
 
         private int Count1(string cmd, bool[] found)
         {
-            int c = 0;
-            for (int i = 0; i < generatedNumberToWhatToGuess.Length; i++)
+            var c = 0;
+            for (var i = 0; i < this.generatedNumberToWhatToGuess.Length; i++)
             {
                 if (!found[i])
                 {
-                    bool found2 = false;
-                    for (int j = 0; j < cmd.Length; j++)
+                    var found2 = false;
+                    for (var j = 0; j < cmd.Length; j++)
                     {
-                        if (generatedNumberToWhatToGuess[i] == cmd[j])
+                        if (this.generatedNumberToWhatToGuess[i] == cmd[j])
                         {
                             if (i != j)
                             {
@@ -160,7 +163,11 @@ namespace kravi
                             }
                         }
                     }
-                    if (found2) { c++; }
+
+                    if (found2)
+                    {
+                        c++;
+                    }
                 }
             }
 
@@ -169,14 +176,15 @@ namespace kravi
 
         private void ShowRand()
         {
-            Console.WriteLine("Bull at position "+(Positions[++cposs % generatedNumberToWhatToGuess.Length]+1)+ ": <" + generatedNumberToWhatToGuess[Positions[cposs % generatedNumberToWhatToGuess.Length]] + ">");
+            Console.WriteLine("Bull at position " + (this.Positions[++this.cposs % this.generatedNumberToWhatToGuess.Length] + 1) + ": <" +
+                              this.generatedNumberToWhatToGuess[this.Positions[this.cposs % this.generatedNumberToWhatToGuess.Length]] + ">");
         }
 
         private void Init()
         {
-            randomNumberProvider.CurrentProvider = new MyProvider();
-            generatedNumberToWhatToGuess = randomNumberProvider.CurrentProvider.GetRandomNumber();
-            score = 0;
+            RandomNumberProvider.CurrentProvider = new MyProvider();
+            this.generatedNumberToWhatToGuess = RandomNumberProvider.CurrentProvider.GetRandomNumber();
+            this.score = 0;
         }
     }
 }

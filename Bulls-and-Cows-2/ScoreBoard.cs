@@ -1,27 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-namespace bikove
+﻿namespace Bulls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+
     public class Scoreboard
     {
-        private SortedSet<gameScore> scores;
         private const int MaxPlayersToShowInScoreboard = 10;
+        private readonly SortedSet<GameScore> scores;
 
         public Scoreboard(string filename)
         {
-            this.scores = new SortedSet<gameScore>();
+            this.scores = new SortedSet<GameScore>();
             try
             {
-                using (StreamReader inputStream = new StreamReader(filename))
+                using (var inputStream = new StreamReader(filename))
                 {
                     while (!inputStream.EndOfStream)
                     {
-                        string scoreString = inputStream.ReadLine();
-                        this.scores.Add(gameScore.Deserialize(scoreString));
+                        var scoreString = inputStream.ReadLine();
+                        this.scores.Add(GameScore.Deserialize(scoreString));
                     }
                 }
             }
@@ -33,7 +32,7 @@ namespace bikove
 
         public void AddScore(string name, int guesses)
         {
-            gameScore newScore = new gameScore(name, guesses);
+            var newScore = new GameScore(name, guesses);
             this.scores.Add(newScore);
         }
 
@@ -41,9 +40,9 @@ namespace bikove
         {
             try
             {
-                using (StreamWriter outputStream = new StreamWriter(filename))
+                using (var outputStream = new StreamWriter(filename))
                 {
-                    foreach (gameScore gameScore in scores)
+                    foreach (var gameScore in this.scores)
                     {
                         outputStream.WriteLine(gameScore.Serialize());
                     }
@@ -57,19 +56,24 @@ namespace bikove
 
         public override string ToString()
         {
-            if (scores.Count == 0)
+            if (this.scores.Count == 0)
             {
                 return "Top scoreboard is empty." + Environment.NewLine;
             }
-            StringBuilder scoreBoard = new StringBuilder();
+
+            var scoreBoard = new StringBuilder();
             scoreBoard.AppendLine("Scoreboard:");
-            int count = 0;
-            foreach (gameScore gameScore in scores)
+            var count = 0;
+            foreach (var gameScore in this.scores)
             {
                 count++;
                 scoreBoard.AppendLine(string.Format("{0}. {1}", count, gameScore));
-                if (count > MaxPlayersToShowInScoreboard) break;
+                if (count > MaxPlayersToShowInScoreboard)
+                {
+                    break;
+                }
             }
+
             return scoreBoard.ToString();
         }
     }

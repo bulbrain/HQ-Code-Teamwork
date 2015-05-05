@@ -1,39 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace kravi
+﻿namespace Cows
 {
+    using System;
+
     public class Record : IComparable<Record>
     {
-        string name;
-        int score;         
         public Record(string name, int score)
         {
-            this.name = name;
-            this.score = score;
+            this.Name = name;
+            this.Score = score;
         }
-        public string Name
-        {
-            get
-            {
 
+        public string Name { get; private set; }
 
+        public int Score { get; private set; }
 
-                return name;
-            }
-        }
-        public int Score
-        {
-            get
-            {
-                return score;
-            }
-        }
         public int CompareTo(Record other)
         {
-            return score.CompareTo(other.score);
+            return this.Score.CompareTo(other.Score);
         }
     }
 }

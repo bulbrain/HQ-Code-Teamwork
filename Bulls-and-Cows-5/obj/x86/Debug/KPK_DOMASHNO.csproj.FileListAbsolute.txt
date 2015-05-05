@@ -1,0 +1,5 @@
+F:\SoftUni\2\Teamwork\2. High-Quality-Code\HQ-Code-Teamwork\trunk\Bulls-and-Cows-5\bin\Debug\BullsCows.exe
+F:\SoftUni\2\Teamwork\2. High-Quality-Code\HQ-Code-Teamwork\trunk\Bulls-and-Cows-5\bin\Debug\BullsCows.pdb
+F:\SoftUni\2\Teamwork\2. High-Quality-Code\HQ-Code-Teamwork\trunk\Bulls-and-Cows-5\obj\x86\Debug\KPK_DOMASHNO.csprojResolveAssemblyReference.cache
+F:\SoftUni\2\Teamwork\2. High-Quality-Code\HQ-Code-Teamwork\trunk\Bulls-and-Cows-5\obj\x86\Debug\BullsCows.exe
+F:\SoftUni\2\Teamwork\2. High-Quality-Code\HQ-Code-Teamwork\trunk\Bulls-and-Cows-5\obj\x86\Debug\BullsCows.pdb

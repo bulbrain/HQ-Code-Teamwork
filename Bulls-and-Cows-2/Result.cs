@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace bikove
+﻿namespace Bulls
 {
-    public struct rezultat
+    public struct Result
     {
         public int Bulls;
         public int Cows;

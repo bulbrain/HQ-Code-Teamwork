@@ -6,17 +6,23 @@ public class klasirane
 {
     private const int KLASIRANE_RAZMER = 5;
     private static klasirane instance;
-    private List<KeyValuePair<string, int>> klasiraneto;
+    private readonly List<KeyValuePair<string, int>> klasiraneto;
+
     private klasirane()
     {
         this.klasiraneto = new List<KeyValuePair<string, int>>();
     }
-    private void Sort()
+
+    public static klasirane GetInstance()
     {
-        this.klasiraneto.Sort(new Comparison<KeyValuePair<string, int>>(
-                                                                        (first, second) => second.Value.CompareTo(first.Value)
-                                                                        ));
+        if (instance == null)
+        {
+            instance = new klasirane();
+        }
+
+        return instance;
     }
+
     public bool IsHighScore(int attempts)
     {
         if (this.klasiraneto.Count < KLASIRANE_RAZMER || this.klasiraneto.Last().Value < attempts)
@@ -25,24 +31,17 @@ public class klasirane
         }
         return false;
     }
-    public static klasirane GetInstance()
-    {
-        if (instance == null)
-        {
-            instance = new klasirane();
-        }
-        return instance;
-    }
+
     public void Add(string name, int attempts)
     {
         this.klasiraneto.Add(new KeyValuePair<string, int>(name, attempts));
-        Sort();
+        this.Sort();
         if (this.klasiraneto.Count > KLASIRANE_RAZMER)
         {
             this.klasiraneto.RemoveAt(this.klasiraneto.Count - 1);
         }
-
     }
+
     public void sort()
     {
         if (this.klasiraneto.Count == 0)
@@ -51,15 +50,21 @@ public class klasirane
             Console.WriteLine();
             return;
         }
-        Sort();
+
+        this.Sort();
         Console.WriteLine("Scoreboard:");
-        for (int index = 0; index < this.klasiraneto.Count; index++)
+        for (var index = 0; index < this.klasiraneto.Count; index++)
         {
-            string name = this.klasiraneto[index].Key;
-            int attempts = this.klasiraneto[index].Value;
+            var name = this.klasiraneto[index].Key;
+            var attempts = this.klasiraneto[index].Value;
             Console.WriteLine("{0}. {1} --> {2} guesses", index + 1, name, attempts);
         }
+
         Console.WriteLine();
     }
-}
 
+    private void Sort()
+    {
+        this.klasiraneto.Sort((first, second) => second.Value.CompareTo(first.Value));
+    }
+}

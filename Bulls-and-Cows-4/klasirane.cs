@@ -1,68 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace BullsAndCowsGame
+﻿namespace BullsAndCowsGame
 {
-//tova raboti - testvano e, NE PIPAJJJJ!!!!!!!!
-    class klasirane<T> : IEnumerable<T>, IEnumerator<T> where T : IComparable<T>
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
+    internal class Klasirane<T> : IEnumerable<T>, IEnumerator<T> where T : IComparable<T>
     {
-        private int maxCountOfStoredData;
-        private T[] data;
+        private readonly T[] data;
+        private readonly int maxCountOfStoredData;
         private int position = -1;
 
-        private int count;
-        public int Count
+        public Klasirane() : this(5)
         {
-            get { return this.count; }
         }
 
-        public klasirane() : this(5) { }
-
-        public klasirane(int aMaxCountOfStoredData)
+        public Klasirane(int aMaxCountOfStoredData)
         {
-            maxCountOfStoredData = aMaxCountOfStoredData;
-            data = new T[maxCountOfStoredData];
-            count = 0;
+            this.maxCountOfStoredData = aMaxCountOfStoredData;
+            this.data = new T[this.maxCountOfStoredData];
+            this.Count = 0;
         }
 
-        public void Add(T item)
+        object IEnumerator.Current
         {
-            if (item.CompareTo(data[maxCountOfStoredData - 1]) >= 0)
-            {
-                int tPointer = 0;
-                while (item.CompareTo(data[tPointer]) < 0)
-                {
-                    tPointer++;
-                }
+            get { return this.data[this.position]; }
+        }
 
-                for (int i = maxCountOfStoredData - 1; i > tPointer; i--)
-                {
-                    data[i] = data[i - 1];
-                }
+        public int Count { get; private set; }
 
-                data[tPointer] = item;
-                if (count < maxCountOfStoredData)
-                {
-                    count++;
-                }
-            }
+        public T Current
+        {
+            get { return this.data[this.position]; }
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return (IEnumerator<T>)this;
+            return this;
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return (IEnumerator<T>)this;
-        }
-
-        public T Current
-        {
-            get { return data[position]; }
+            return this;
         }
 
         public void Dispose()
@@ -70,16 +48,11 @@ namespace BullsAndCowsGame
             this.Reset();
         }
 
-        object System.Collections.IEnumerator.Current
-        {
-            get { return data[position]; }
-        }
-
         public bool MoveNext()
         {
-            if(position < Count - 1)
+            if (this.position < this.Count - 1)
             {
-                position++;
+                this.position++;
                 return true;
             }
 
@@ -88,7 +61,30 @@ namespace BullsAndCowsGame
 
         public void Reset()
         {
-            position = -1;
+            this.position = -1;
         }
-    }      
+
+        public void Add(T item)
+        {
+            if (item.CompareTo(this.data[this.maxCountOfStoredData - 1]) >= 0)
+            {
+                var tPointer = 0;
+                while (item.CompareTo(this.data[tPointer]) < 0)
+                {
+                    tPointer++;
+                }
+
+                for (var i = this.maxCountOfStoredData - 1; i > tPointer; i--)
+                {
+                    this.data[i] = this.data[i - 1];
+                }
+
+                this.data[tPointer] = item;
+                if (this.Count < this.maxCountOfStoredData)
+                {
+                    this.Count++;
+                }
+            }
+        }
+    }
 }

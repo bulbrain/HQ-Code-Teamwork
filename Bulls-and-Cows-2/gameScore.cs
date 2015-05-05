@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization;
-
-namespace bikove
+﻿namespace Bulls
 {
-    public class gameScore : IComparable
+    using System;
+
+    public class GameScore : IComparable
     {
-        public gameScore(string ime, int guesses)
+        public GameScore(string ime, int guesses)
         {
             this.Name = ime;
             this.Guesses = guesses;
@@ -19,23 +15,38 @@ namespace bikove
             get;
             private set;
         }
+
         public int Guesses
         {
             get;
             private set;
         }
+
+        public static GameScore Deserialize(string data)
+        {
+            string[] dataAsStringArray = data.Split(new string[] { "_:::_" }, StringSplitOptions.None);
+            if (dataAsStringArray.Length != 2)
+            {
+                return null;
+            }
+
+            string name = dataAsStringArray[0];
+
+            int guesses = 0;
+            int.TryParse(dataAsStringArray[1], out guesses);
+
+            return new GameScore(name, guesses);
+        }
+
         public override bool Equals(object obj)
         {
-            gameScore objectToCompare = obj as gameScore;
+            GameScore objectToCompare = obj as GameScore;
             if (objectToCompare == null)
             {
                 return false;
             }
             else
             {
-
-
-
                 return this.Guesses.Equals(objectToCompare) && this.Name.Equals(objectToCompare);
             }
         }
@@ -52,17 +63,15 @@ namespace bikove
 
         public int CompareTo(object obj)
         {
-            gameScore objectToCompare = obj as gameScore;
+            GameScore objectToCompare = obj as GameScore;
             if (objectToCompare == null)
             {
                 return -1;
             }
+
             if (this.Guesses.CompareTo(objectToCompare.Guesses) == 0)
             {
-                
-				
-				
-				return this.Name.CompareTo(objectToCompare.Name);
+                return this.Name.CompareTo(objectToCompare.Name);
             }
             else
             {
@@ -73,21 +82,6 @@ namespace bikove
         public string Serialize()
         {
             return string.Format("{0}_:::_{1}", this.Name, this.Guesses);
-
-
-
-        }
-        public static gameScore Deserialize(string data)
-        {
-            string[] dataAsStringArray = data.Split(new string[] { "_:::_" }, StringSplitOptions.None);
-            if (dataAsStringArray.Length != 2) return null;
-
-            string name = dataAsStringArray[0];
-
-            int guesses = 0;
-            int.TryParse(dataAsStringArray[1], out guesses);
-
-            return new gameScore(name, guesses);
         }
     }
 }

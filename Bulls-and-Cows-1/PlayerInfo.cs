@@ -3,31 +3,33 @@
 public class PlayerInfo : IComparable<PlayerInfo>
 {
     private string nickName;
-    public string NickName
-    {
-        get
-        {
-		return nickName;
-        }
-        set
-        {
-            if (nickName == String.Empty)
-            {
-                throw new ArgumentException("NickName should have at least 1 symbol!");
-            }
-            else
-            {
-                nickName = value;
-            }
-        }
-    }
-
-    public int Guesses { get; set; }
 
     public PlayerInfo(string nickName, int guesses)
     {
         this.NickName = nickName;
         this.Guesses = guesses;
+    }
+
+    public int Guesses { get; set; }
+
+    public string NickName
+    {
+        get
+        {
+            return this.nickName;
+        }
+
+        set
+        {
+            if (this.nickName == string.Empty)
+            {
+                throw new ArgumentException("NickName should have at least 1 symbol!");
+            }
+            else
+            {
+                this.nickName = value;
+            }
+        }
     }
 
     public int CompareTo(PlayerInfo other)
@@ -44,7 +46,7 @@ public class PlayerInfo : IComparable<PlayerInfo>
 
     public override string ToString()
     {
-        string result = String.Format("{0,3}    | {1}", Guesses, NickName);
+        string result = string.Format("{0,3}    | {1}", this.Guesses, this.NickName);
         return result;
     }
 }
