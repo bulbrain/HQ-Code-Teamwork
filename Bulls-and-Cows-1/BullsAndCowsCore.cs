@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-public class CowsBuls
+public class BullsAndCowsCore
 {
-    private static List<PlayerInfo> klasirane = new List<PlayerInfo>();
+    private static List<PlayerInfo> rating = new List<PlayerInfo>();
     private static int count1;
     private static int count2;
     private static string numberForGuessString;
@@ -262,13 +262,13 @@ public class CowsBuls
         }
         else
         {
-            if (klasirane.Count < 5)
+            if (rating.Count < 5)
             {
                 AddPlayer(guesses);
             }
-            else if (klasirane[4].GuessNumber > guesses)
+            else if (rating[4].GuessNumber > guesses)
             {
-                klasirane.RemoveAt(4);
+                rating.RemoveAt(4);
                 AddPlayer(guesses);
             }
         }
@@ -285,12 +285,11 @@ public class CowsBuls
                 Console.Write("Enter your nickname: ");
                 playerNick = Console.ReadLine();
                 PlayerInfo newPlayer = new PlayerInfo(playerNick, guesses);
-                klasirane.Add(newPlayer);
+                rating.Add(newPlayer);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException ae)
             {
-                Console.WriteLine(e.Message);
-                continue;
+                Console.WriteLine(ae.Message);
             }
         }
     }
@@ -298,14 +297,14 @@ public class CowsBuls
     private static void PrintScoreboard()
     {
         Console.WriteLine();
-        if (klasirane.Count > 0)
+        if (rating.Count > 0)
         {
             Console.WriteLine("Scoreboard:");
-            klasirane.Sort();
+            rating.Sort();
             int currentPosition = 1;
             Console.WriteLine("  {0,7} | {1}", "guessNumber", "Name");
             PrintLine(40);
-            foreach (var currentPlayerInfo in klasirane)
+            foreach (var currentPlayerInfo in rating)
             {
                 Console.WriteLine("{0}| {1}", currentPosition, currentPlayerInfo);
                 PrintLine(40);

@@ -27,10 +27,7 @@ public class PlayerInfo : IComparable<PlayerInfo>
 
     public string Username
     {
-        get
-        {
-            return this.username;
-        }
+        get { return this.username; }
 
         set
         {
