@@ -18,16 +18,13 @@ internal class BullsAndCows
     private const string IN_SCOREBOARD = "Please enter your name for the top scoreboard: ";
     private const string OUT_SCOREBOARD = "You are not allowed to enter the top scoreboard.";
     private const string EXIT_GAME = "Good bye!";
-    private readonly Random random;
+    private readonly Random r;
     private List<int> digits;
     private char[] helpExpression;
 
-    /// <summary>
-    /// set random number
-    /// </summary>
     public BullsAndCows()
     {
-        this.random = new Random();
+        this.r = new Random();
         this.SetDigits();
     }
 
@@ -41,9 +38,9 @@ internal class BullsAndCows
     {
         while (true)
         {
-            var flag = false;
-            var helpComand = 0;
-            var countAttempts = 0;
+            var flag1 = false;
+            var count2 = 0;
+            var count1 = 0;
             Console.WriteLine(START_EXPRESSION);
             do
             {
@@ -52,13 +49,13 @@ internal class BullsAndCows
 
                 if (line.Trim().ToLower().CompareTo("help") == 0)
                 {
-                    if (helpComand == NUMBER_OF_DIGITS)
+                    if (count2 == NUMBER_OF_DIGITS)
                     {
                         Console.WriteLine(HELP_UNAVAILABLE);
                         continue;
                     }
 
-                    helpComand++;
+                    count2++;
                     var helpExpression = this.Help();
                     Console.WriteLine("{0} {1}", HELP, helpExpression);
                     continue;
@@ -66,8 +63,8 @@ internal class BullsAndCows
 
                 if (line.Trim().ToLower().CompareTo("top") == 0)
                 {
-                    var scoreboard = Result.GetInstance();
-                    scoreboard.SortResults();
+                    var scoreboard = klasirane.GetInstance();
+                    scoreboard.sort();
                 }
                 else if (line.Trim().ToLower().CompareTo("restart") == 0)
                 {
@@ -76,51 +73,51 @@ internal class BullsAndCows
                 }
                 else if (line.Trim().ToLower().CompareTo("exit") == 0)
                 {
-                    flag = true;
+                    flag1 = true;
                     Console.WriteLine(EXIT_GAME);
                     break;
                 }
 
-                var bulls = 0;
-                var cows = 0;
-                if (!this.ProccessGues(line.Trim(), out bulls, out cows))
+                var count3 = 0;
+                var count4 = 0;
+                if (!this.ProccessGues(line.Trim(), out count3, out count4))
                 {
                     Console.WriteLine(WRONG_INPUT);
                     continue;
                 }
 
-                countAttempts++;
-                if (bulls == NUMBER_OF_DIGITS)
+                count1++;
+                if (count3 == NUMBER_OF_DIGITS)
                 {
                     Console.WriteLine(
-                        helpComand == 0
+                        count2 == 0
                             ? "Congratulations! You guessed the secret number in {0} attempts and {1} cheats."
-                            : "Congratulations! You guessed the secret number in {0} attempts.",
-                            countAttempts,
-                            helpComand);
+                            : "Congratulations! You guessed the secret number in {0} attempts.", 
+                            count1, 
+                            count2);
                     Console.WriteLine(new string('-', 80));
 
-                    var scoreBoard = Result.GetInstance();
-                    if (helpComand == 0 && scoreBoard.IsHighScore(countAttempts))
+                    var scoreBoard = klasirane.GetInstance();
+                    if (count2 == 0 && scoreBoard.IsHighScore(count1))
                     {
                         Console.WriteLine(IN_SCOREBOARD);
                         var name = Console.ReadLine();
-                        scoreBoard.Add(name, countAttempts);
+                        scoreBoard.Add(name, count1);
                     }
                     else
                     {
                         Console.WriteLine(OUT_SCOREBOARD);
                     }
 
-                    scoreBoard.SortResults();
+                    scoreBoard.sort();
                     break;
                 }
 
-                Console.WriteLine("{0} Bulls: {1}, Cows: {2}", WRONG_GUES, bulls, cows);
-            }
+                Console.WriteLine("{0} Bulls: {1}, Cows: {2}", WRONG_GUES, count3, count4);
+            } 
             while (true);
 
-            if (flag)
+            if (flag1)
             {
                 break;
             }
@@ -134,7 +131,7 @@ internal class BullsAndCows
         this.digits = new List<int>();
         for (var index = 0; index < NUMBER_OF_DIGITS; index++)
         {
-            this.digits.Add(this.random.Next(0, 10));
+            this.digits.Add(this.r.Next(0, 10));
         }
 
         this.helpExpression = new char[NUMBER_OF_DIGITS];
@@ -143,13 +140,7 @@ internal class BullsAndCows
             this.helpExpression[index] = 'X';
         }
     }
-    /// <summary>
-    /// check how many cows and bulls we have.
-    /// </summary>
-    /// <param name="gues"></param>
-    /// <param name="bulls"></param>
-    /// <param name="cows"></param>
-    /// <returns></returns>
+
     private bool ProccessGues(string gues, out int bulls, out int cows)
     {
         bulls = 0;
@@ -179,16 +170,13 @@ internal class BullsAndCows
 
         return true;
     }
-    /// <summary>
-    /// cheat method
-    /// </summary>
-    /// <returns></returns>
+
     private string Help()
     {
-        var helpPosition = this.random.Next(NUMBER_OF_DIGITS);
+        var helpPosition = this.r.Next(NUMBER_OF_DIGITS);
         while (this.helpExpression[helpPosition] != 'X')
         {
-            helpPosition = this.random.Next(NUMBER_OF_DIGITS);
+            helpPosition = this.r.Next(NUMBER_OF_DIGITS);
         }
 
         this.helpExpression[helpPosition] = char.Parse(this.digits[helpPosition].ToString());
