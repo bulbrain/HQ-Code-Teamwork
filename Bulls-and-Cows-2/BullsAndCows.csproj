@@ -45,7 +45,7 @@
     <Compile Include="BullsAndCows.cs" />
     <Compile Include="CheckForBullsAndCows.cs" />
     <Compile Include="GameScore.cs" />
-    <Compile Include="Result.cs" />
+    <Compile Include="TotalBullAndCows.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ScoreBoard.cs" />
   </ItemGroup>

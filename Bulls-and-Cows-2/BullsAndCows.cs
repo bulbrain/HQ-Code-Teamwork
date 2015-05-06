@@ -70,8 +70,8 @@
                 {
                     try
                     {
-                        Result guessResult = bullsAndCowsNumber.TryToGuess(command);
-                        if (guessResult.Bulls == 4)
+                        TotalBullAndCows guessTotalBullAndCows = bullsAndCowsNumber.TryToGuess(command);
+                        if (guessTotalBullAndCows.Bulls == 4)
                         {
                             if (bullsAndCowsNumber.Cheats == 0)
                             {
@@ -97,7 +97,7 @@
                         }
                         else
                         {
-                            Console.WriteLine("{0} {1}", WrongNumberMessage, guessResult);
+                            Console.WriteLine("{0} {1}", WrongNumberMessage, guessTotalBullAndCows);
                         }
                     }
                     catch (ArgumentException)

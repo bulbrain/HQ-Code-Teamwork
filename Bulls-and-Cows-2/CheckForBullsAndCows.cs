@@ -84,7 +84,7 @@
             return new string(this.cheatNumber);
         }
 
-        public Result TryToGuess(string number)
+        public TotalBullAndCows TryToGuess(string number)
         {
             if (string.IsNullOrEmpty(number) || number.Trim().Length != 4)
             {
@@ -125,7 +125,7 @@
             return this.FirstDigit.GetHashCode() ^ this.SecondDigit.GetHashCode() ^ this.ThirdDigit.GetHashCode() ^ this.FourthDigit.GetHashCode();
         }
 
-        private Result TryToGuessNumber(int firstDigit, int secondDigit, int thirdDigit, int fourthDigit)
+        private TotalBullAndCows TryToGuessNumber(int firstDigit, int secondDigit, int thirdDigit, int fourthDigit)
         {
             if (firstDigit < 0 || firstDigit > 9)
             {
@@ -253,11 +253,11 @@
                 cows++;
             }
 
-            Result guessResult = new Result();
-            guessResult.Bulls = bulls;
-            guessResult.Cows = cows;
-            guessResult.Cows = cows;
-            return guessResult;
+            TotalBullAndCows guessTotalBullAndCows = new TotalBullAndCows();
+            guessTotalBullAndCows.Bulls = bulls;
+            guessTotalBullAndCows.Cows = cows;
+            guessTotalBullAndCows.Cows = cows;
+            return guessTotalBullAndCows;
         }
 
         private void GenerateRandomNumbers()
