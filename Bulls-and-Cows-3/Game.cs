@@ -182,7 +182,7 @@
 
         private void Init()
         {
-            RandomNumberProvider.CurrentProvider = new MyProvider();
+            RandomNumberProvider.CurrentProvider = new RandomNumberProvider();
             this.targetNumber = RandomNumberProvider.CurrentProvider.GetRandomNumber();
             this.score = 0;
         }

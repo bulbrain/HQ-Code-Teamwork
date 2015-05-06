@@ -4,30 +4,30 @@
 
     public class RandomNumberProvider
     {
-        private static RandomNumberProvider currentProvider;
+        private static RandomNumberProvider provider;
         private Random r = new Random();
 
         public static RandomNumberProvider CurrentProvider
         {
             get
             {
-                if (currentProvider == null)
+                if (provider == null)
                 {
-                    currentProvider = new RandomNumberProvider();
+                    provider = new RandomNumberProvider();
                 }
 
-                return currentProvider;
+                return provider;
             }
 
             set
             {
-                currentProvider = value;
+                provider = value;
             }
         }
 
         public virtual string GetRandomNumber()
         {
-            return 4165.ToString();
+            return ((int)(r.NextDouble() * 9000 + 1000)).ToString();
         }
     }
 }
