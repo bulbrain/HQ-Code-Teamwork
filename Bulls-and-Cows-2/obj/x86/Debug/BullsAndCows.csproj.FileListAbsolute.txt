@@ -1,0 +1,5 @@
+C:\Users\Iliya_000\Desktop\HQ-Code-Teamwork\Bulls-and-Cows-2\bin\Debug\BullsAndCowsGame.exe
+C:\Users\Iliya_000\Desktop\HQ-Code-Teamwork\Bulls-and-Cows-2\bin\Debug\BullsAndCowsGame.pdb
+C:\Users\Iliya_000\Desktop\HQ-Code-Teamwork\Bulls-and-Cows-2\obj\x86\Debug\BullsAndCows.csprojResolveAssemblyReference.cache
+C:\Users\Iliya_000\Desktop\HQ-Code-Teamwork\Bulls-and-Cows-2\obj\x86\Debug\BullsAndCowsGame.exe
+C:\Users\Iliya_000\Desktop\HQ-Code-Teamwork\Bulls-and-Cows-2\obj\x86\Debug\BullsAndCowsGame.pdb

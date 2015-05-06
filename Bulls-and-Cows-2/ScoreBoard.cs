@@ -1,10 +1,10 @@
-﻿namespace Bulls
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
+namespace BullsAndCowsGame
+{
     public class Scoreboard
     {
         private const int MaxPlayersToShowInScoreboard = 10;
@@ -12,7 +12,7 @@
 
         public Scoreboard(string filename)
         {
-            this.scores = new SortedSet<GameScore>();
+            scores = new SortedSet<GameScore>();
             try
             {
                 using (var inputStream = new StreamReader(filename))
@@ -20,20 +20,19 @@
                     while (!inputStream.EndOfStream)
                     {
                         var scoreString = inputStream.ReadLine();
-                        this.scores.Add(GameScore.Deserialize(scoreString));
+                        scores.Add(GameScore.Deserialize(scoreString));
                     }
                 }
             }
             catch (IOException)
             {
-                // Stop reading
             }
         }
 
         public void AddScore(string name, int guesses)
         {
             var newScore = new GameScore(name, guesses);
-            this.scores.Add(newScore);
+            scores.Add(newScore);
         }
 
         public void SaveToFile(string filename)
@@ -42,7 +41,7 @@
             {
                 using (var outputStream = new StreamWriter(filename))
                 {
-                    foreach (var gameScore in this.scores)
+                    foreach (var gameScore in scores)
                     {
                         outputStream.WriteLine(gameScore.Serialize());
                     }
@@ -50,13 +49,12 @@
             }
             catch (IOException)
             {
-                // Stop writing
             }
         }
 
         public override string ToString()
         {
-            if (this.scores.Count == 0)
+            if (scores.Count == 0)
             {
                 return "Top scoreboard is empty." + Environment.NewLine;
             }
@@ -64,7 +62,7 @@
             var scoreBoard = new StringBuilder();
             scoreBoard.AppendLine("Scoreboard:");
             var count = 0;
-            foreach (var gameScore in this.scores)
+            foreach (var gameScore in scores)
             {
                 count++;
                 scoreBoard.AppendLine(string.Format("{0}. {1}", count, gameScore));

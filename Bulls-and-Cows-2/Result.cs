@@ -1,4 +1,4 @@
-﻿namespace Bulls
+﻿namespace BullsAndCowsGame
 {
     public struct Result
     {
