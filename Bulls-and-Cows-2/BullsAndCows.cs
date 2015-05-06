@@ -1,271 +1,114 @@
 ﻿namespace BullsAndCowsGame
 {
     using System;
-    using System.Text;
 
-    public class BullsAndCows
+    internal class BullsAndCows
     {
-        private Random rand;
-        private char[] cheatNumber;
+        public const string ScoresFile = "scores.txt";
 
-        public BullsAndCows()
-        {
-            this.rand = new Random();
-            this.cheatNumber = new char[4] { 'X', 'X', 'X', 'X' };
-            this.Cheats = 0;
-            this.GuessesCount = 0;
-            this.GenerateRandomNumbers();
-        }
+        public const string WelcomeMessage =
+            "Welcome to “Bulls and Cows” game. Please try to guess my secret 4-digit number.\nUse 'top' to view the top scoreboard, 'restart' to start a new game and 'help' to cheat and 'exit' to quit the game.";
 
-        public int Cheats
-        {
-            get;
-            private set;
-        }
+        public const string WrongNumberMessage = "Wrong number!";
+        public const string InvalidCommandMessage = "Incorrect guess or command!";
 
-        public int GuessesCount
-        {
-            get;
-            private set;
-        }
+        public const string NumberGuessedWithoutCheats =
+            "Congratulations! You guessed the secret number in {0} {1}.\nPlease enter your name for the top scoreboard: ";
 
-        public int FirstDigit
-        {
-            get;
-            private set;
-        }
+        public const string NumberGuessedWithCheats =
+            "Congratulations! You guessed the secret number in {0} {1} and {2} {3}.\nYou are not allowed to enter the top scoreboard.";
 
-        public int SecondDigit
-        {
-            get;
-            private set;
-        }
+        public const string GoodBuyMessage = "Good bye!";
 
-        public int ThirdDigit
+        public void Play()
         {
-            get;
-            private set;
-        }
-
-        public int FourthDigit
-        {
-            get;
-            private set;
-        }
-
-        public string GetCheat()
-        {
-            if (this.Cheats < 4)
+            CheckForBullsAndCows bullsAndCowsNumber = new CheckForBullsAndCows();
+            Scoreboard scoreBoard = new Scoreboard(ScoresFile);
+            Console.WriteLine(WelcomeMessage);
+            while (true)
             {
-                while (true)
+                Console.Write("Enter your guess or command: ");
+                string command = Console.ReadLine();
+                if (command == "exit")
                 {
-                    int randPossition = this.rand.Next(0, 4);
-                    if (this.cheatNumber[randPossition] == 'X')
-                    {
-                        switch (randPossition)
-                        {
-                            case 0: this.cheatNumber[randPossition] = (char)(this.FirstDigit + '0'); 
-                                break;
-                            case 1: this.cheatNumber[randPossition] = (char)(this.SecondDigit + '0'); 
-                                break;
-                            case 2: this.cheatNumber[randPossition] = (char)(this.ThirdDigit + '0'); 
-                                break;
-                            case 3: this.cheatNumber[randPossition] = (char)(this.FourthDigit + '0'); 
-                                break;
-                        }
-
-                        break;
-                    }
+                    Console.WriteLine(GoodBuyMessage);
+                    break;
                 }
 
-                this.Cheats++;
+                bullsAndCowsNumber = CommandExecute(command, scoreBoard, bullsAndCowsNumber);
             }
 
-            return new string(this.cheatNumber);
+            scoreBoard.SaveToFile(ScoresFile);
         }
 
-        public Result TryToGuess(string number)
+        private static CheckForBullsAndCows CommandExecute(string command, Scoreboard scoreBoard,
+            CheckForBullsAndCows bullsAndCowsNumber)
         {
-            if (string.IsNullOrEmpty(number) || number.Trim().Length != 4)
+            switch (command)
             {
-                throw new ArgumentException("Invalid string number");
+                case "top":
+                {
+                    Console.Write(scoreBoard);
+                    break;
+                }
+
+                case "restart":
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(WelcomeMessage);
+                    bullsAndCowsNumber = new CheckForBullsAndCows();
+                    break;
+                }
+
+                case "help":
+                {
+                    Console.WriteLine("The number looks like {0}.", bullsAndCowsNumber.GetCheat());
+                    break;
+                }
+
+                default:
+                {
+                    try
+                    {
+                        Result guessResult = bullsAndCowsNumber.TryToGuess(command);
+                        if (guessResult.Bulls == 4)
+                        {
+                            if (bullsAndCowsNumber.Cheats == 0)
+                            {
+                                Console.Write(NumberGuessedWithoutCheats, bullsAndCowsNumber.GuessesCount,
+                                    bullsAndCowsNumber.GuessesCount == 1 ? "attempt" : "attempts");
+                                string name = Console.ReadLine();
+                                scoreBoard.AddScore(name, bullsAndCowsNumber.GuessesCount);
+                            }
+                            else
+                            {
+                                Console.WriteLine(
+                                    NumberGuessedWithCheats,
+                                    bullsAndCowsNumber.GuessesCount,
+                                    bullsAndCowsNumber.GuessesCount == 1 ? "attempt" : "attempts",
+                                    bullsAndCowsNumber.Cheats,
+                                    bullsAndCowsNumber.Cheats == 1 ? "cheat" : "cheats");
+                            }
+
+                            Console.Write(scoreBoard);
+                            Console.WriteLine();
+                            Console.WriteLine(WelcomeMessage);
+                            bullsAndCowsNumber = new CheckForBullsAndCows();
+                        }
+                        else
+                        {
+                            Console.WriteLine("{0} {1}", WrongNumberMessage, guessResult);
+                        }
+                    }
+                    catch (ArgumentException)
+                    {
+                        Console.WriteLine(InvalidCommandMessage);
+                    }
+
+                    break;
+                }
             }
-
-            return this.TryToGuess(number[0] - '0', number[1] - '0', number[2] - '0', number[3] - '0');
-        }
-
-        public override string ToString()
-        {
-            StringBuilder numberStringBuilder = new StringBuilder();
-            numberStringBuilder.Append(this.FirstDigit);
-            numberStringBuilder.Append(this.SecondDigit);
-            numberStringBuilder.Append(this.ThirdDigit);
-            numberStringBuilder.Append(this.FourthDigit);
-            return numberStringBuilder.ToString();
-        }
-
-        public override bool Equals(object obj)
-        {
-            BullsAndCows objectToCompare = obj as BullsAndCows;
-            if (objectToCompare == null)
-            {
-                return false;
-            }
-            else
-            {
-                return this.FirstDigit == objectToCompare.FirstDigit &&
-                        this.SecondDigit == objectToCompare.SecondDigit &&
-                        this.ThirdDigit == objectToCompare.ThirdDigit &&
-                        this.FourthDigit == objectToCompare.FourthDigit;
-            }
-        }
-
-        public override int GetHashCode()
-        {
-            return this.FirstDigit.GetHashCode() ^ this.SecondDigit.GetHashCode() ^ this.ThirdDigit.GetHashCode() ^ this.FourthDigit.GetHashCode();
-        }
-
-        private Result TryToGuess(int firstDigit, int secondDigit, int thirdDigit, int fourthDigit)
-        {
-            if (firstDigit < 0 || firstDigit > 9)
-            {
-                throw new ArgumentException("Invalid first digit");
-            }
-
-            if (secondDigit < 0 || secondDigit > 9)
-            {
-                throw new ArgumentException("Invalid second digit");
-            }
-
-            if (thirdDigit < 0 || thirdDigit > 9)
-            {
-                throw new ArgumentException("Invalid third digit");
-            }
-
-            if (fourthDigit < 0 || fourthDigit > 9)
-            {
-                throw new ArgumentException("Invalid fourth digit");
-            }
-
-            this.GuessesCount++;
-
-            int bulls = 0;
-
-            bool isFirstDigitBullOrCow = false;
-
-            if (this.FirstDigit == firstDigit)
-            {
-                isFirstDigitBullOrCow = true;
-                bulls++;
-            }
-
-            bool isSecondDigitBullOrCow = false;
-
-            if (this.SecondDigit == secondDigit)
-            {
-                isSecondDigitBullOrCow = true;
-                bulls++;
-            }
-
-            bool isThirdDigitBullOrCow = false;
-
-            // checks if thirdDigit is a bull:
-            if (this.ThirdDigit == thirdDigit)
-            {
-                isThirdDigitBullOrCow = true;
-                bulls++;
-            }
-
-            bool isFourthDigitBullOrCow = false;
-
-            // checks if fourthDigit is a bull:
-            if (this.FourthDigit == fourthDigit)
-            {
-                isFourthDigitBullOrCow = true;
-                bulls++;
-            }
-
-            int cows = 0;
-
-            // checks if firstDigit is cow:
-            if (!isSecondDigitBullOrCow && firstDigit == this.SecondDigit)
-            {
-                isSecondDigitBullOrCow = true;
-                cows++;
-            }
-            else if (!isThirdDigitBullOrCow && firstDigit == this.ThirdDigit)
-            {
-                isThirdDigitBullOrCow = true;
-                cows++;
-            }
-            else if (!isFourthDigitBullOrCow && firstDigit == this.FourthDigit)
-            {
-                isFourthDigitBullOrCow = true;
-                cows++;
-            }
-
-            // checks if secondDigit is cow:
-            if (!isFirstDigitBullOrCow && secondDigit == this.FirstDigit)
-            {
-                isFirstDigitBullOrCow = true;
-                cows++;
-            }
-            else if (!isThirdDigitBullOrCow && secondDigit == this.ThirdDigit)
-            {
-                isThirdDigitBullOrCow = true;
-                cows++;
-            }
-            else if (!isFourthDigitBullOrCow && secondDigit == this.FourthDigit)
-            {
-                isFourthDigitBullOrCow = true;
-                cows++;
-            }
-
-            // checks if thirdDigit is cow:
-            if (!isFirstDigitBullOrCow && thirdDigit == this.FirstDigit)
-            {
-                isFirstDigitBullOrCow = true;
-                cows++;
-            }
-            else if (!isSecondDigitBullOrCow && thirdDigit == this.SecondDigit)
-            {
-                isSecondDigitBullOrCow = true;
-                cows++;
-            }
-            else if (!isFourthDigitBullOrCow && thirdDigit == this.FourthDigit)
-            {
-                isFourthDigitBullOrCow = true;
-                cows++;
-            }
-            if (!isFirstDigitBullOrCow && fourthDigit == this.FirstDigit)
-            {
-                isFirstDigitBullOrCow = true;
-                cows++;
-            }
-            else if (!isSecondDigitBullOrCow && fourthDigit == this.SecondDigit)
-            {
-                isSecondDigitBullOrCow = true;
-                cows++;
-            }
-            else if (!isThirdDigitBullOrCow && fourthDigit == this.ThirdDigit)
-            {
-                isThirdDigitBullOrCow = true;
-                cows++;
-            }
-
-            Result guessResult = new Result();
-            guessResult.Bulls = bulls;
-            guessResult.Cows = cows;
-            guessResult.Cows = cows;
-            return guessResult;
-        }
-
-        private void GenerateRandomNumbers()
-        {
-            this.FirstDigit = this.rand.Next(0, 10);
-            this.SecondDigit = this.rand.Next(0, 10);
-            this.ThirdDigit = this.rand.Next(0, 10);
-            this.FourthDigit = this.rand.Next(0, 10);
+            return bullsAndCowsNumber;
         }
     }
 }
