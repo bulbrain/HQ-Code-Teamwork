@@ -2,51 +2,62 @@
 
 public class PlayerInfo : IComparable<PlayerInfo>
 {
-    private string nickName;
+    private string username;
+    private int guessNumber;
 
-    public PlayerInfo(string nickName, int guesses)
+    public PlayerInfo(string username, int guessNumber)
     {
-        this.NickName = nickName;
-        this.Guesses = guesses;
+        this.Username = username;
+        this.GuessNumber = guessNumber;
     }
 
-    public int Guesses { get; set; }
+    public int GuessNumber
+    {
+        get { return this.guessNumber; }
+        set
+        {
+            if (value < 1000 || value > 9999)
+            {
+                throw new ArgumentOutOfRangeException("The guess number must be between 1000 and 9999!");
+            }
 
-    public string NickName
+            this.guessNumber = value;
+        }
+    }
+
+    public string Username
     {
         get
         {
-            return this.nickName;
+            return this.username;
         }
 
         set
         {
-            if (this.nickName == string.Empty)
+            if (String.IsNullOrEmpty(value))
             {
-                throw new ArgumentException("NickName should have at least 1 symbol!");
+                throw new ArgumentNullException("The username should have at least 1 symbol!");
             }
-            else
-            {
-                this.nickName = value;
-            }
+
+            this.username = value;
         }
     }
 
     public int CompareTo(PlayerInfo other)
     {
-        if (this.Guesses.CompareTo(other.Guesses) == 0)
+        if (this.GuessNumber.CompareTo(other.GuessNumber) == 0)
         {
-            return this.NickName.CompareTo(other.NickName);
+            return this.Username.CompareTo(other.Username);
         }
         else
         {
-            return this.Guesses.CompareTo(other.Guesses);
+            return this.GuessNumber.CompareTo(other.GuessNumber);
         }
     }
 
     public override string ToString()
     {
-        string result = string.Format("{0,3}    | {1}", this.Guesses, this.NickName);
+        string result = string.Format("{0,3}    | {1}", this.GuessNumber, this.Username);
         return result;
     }
 }
