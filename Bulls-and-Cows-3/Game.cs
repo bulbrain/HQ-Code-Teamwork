@@ -7,6 +7,7 @@
     {
         private static readonly bool ShouldContinue = true;
         private static readonly bool ShouldNotContinue = false;
+
         private readonly TopScoresDelegate doTopScores;
         private readonly ScoreBoard myBoard;
         private int cposs;
@@ -53,8 +54,8 @@
 
             while (true)
             {
-                var komandata = Console.ReadLine();
-                switch (komandata)
+                var command = Console.ReadLine();
+                switch (command)
                 {
                     case "exit":
                         return ShouldNotContinue;
@@ -73,7 +74,7 @@
                             this.score++;
                         }
 
-                        if (this.MatchCurrent(komandata))
+                        if (this.MatchCurrent(command))
                         {
                             this.doTopScores(this, this.myBoard);
 
@@ -112,17 +113,17 @@
 
             var found = new bool[this.targetNumber.Length];
 
-            var b = this.Count2(cmd, found);
-            var c = this.Count1(cmd, found);
+            var b = this.MatchBulls(cmd, found);
+            var c = this.MatchCows(cmd, found);
 
             Console.WriteLine(b + " bull" + ((b != 1) ? "s" : string.Empty) + " and " + c + " cow" +
                               ((c != 1) ? "s" : string.Empty));
             return false;
         }
 
-        private int Count2(string cmd, bool[] found)
+        private int MatchBulls(string cmd, bool[] found)
         {
-            var c = 0;
+            var count = 0;
             for (var i = 0; i < this.targetNumber.Length; i++)
             {
                 for (var j = 0; j < cmd.Length; j++)
@@ -132,18 +133,18 @@
                         if (i == j)
                         {
                             found[i] = true;
-                            c++;
+                            count++;
                         }
                     }
                 }
             }
 
-            return c;
+            return count;
         }
 
-        private int Count1(string cmd, bool[] found)
+        private int MatchCows(string cmd, bool[] found)
         {
-            var c = 0;
+            var count = 0;
             for (var i = 0; i < this.targetNumber.Length; i++)
             {
                 if (!found[i])
@@ -166,12 +167,12 @@
 
                     if (found2)
                     {
-                        c++;
+                        count++;
                     }
                 }
             }
 
-            return c;
+            return count;
         }
 
         private void ShowRand()
